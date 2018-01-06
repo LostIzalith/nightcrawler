@@ -8,7 +8,7 @@
 
     <parent>
         <artifactId>parent</artifactId>
-        <groupId>com.nightcrawler</groupId>
+        <groupId>com.github.nightcrawler</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
