@@ -6,7 +6,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 
 /**
- * Abstract class for initial context createContext.
+ * Abstract class for initial context scanning.
  */
 public abstract class AbstractAppContextInitializer {
 
