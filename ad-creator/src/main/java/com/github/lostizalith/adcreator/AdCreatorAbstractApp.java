@@ -1,4 +1,4 @@
-package com.github.nightcrawler;
+package com.github.lostizalith.adcreator;
 
 import org.springframework.context.ApplicationContext;
 
