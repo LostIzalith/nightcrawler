@@ -7,8 +7,8 @@
     <artifactId>ad-creator</artifactId>
 
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>com.github.nightcrawler</groupId>
+        <artifactId>nightcrawler</artifactId>
+        <groupId>com.github.lostizalith</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
