@@ -20,6 +20,7 @@
 
     <modules>
         <module>ad-creator</module>
+        <module>simple-task</module>
     </modules>
 
     <properties>
