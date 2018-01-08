@@ -13,9 +13,7 @@ class GreetingTaskConfiguration : TaskConfiguration {
         TODO("not implemented")
     }
 
-    override fun taskHandle(appName: String) {
-        TODO("not implemented")
-    }
+    override fun submit(appName: String, handler: TaskConfigurationHandling) = handler.handle(appName, this)
 
     override fun postLoadHandle(appName: String) {
         TODO("not implemented")

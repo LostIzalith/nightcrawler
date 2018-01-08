@@ -9,7 +9,7 @@ interface TaskConfiguration : Serializable {
 
     fun getAppName(): String
 
-    fun taskHandle(appName: String)
+    fun submit(appName: String, handler: TaskConfigurationHandling): TaskResult
 
     fun postLoadHandle(appName: String)
 
