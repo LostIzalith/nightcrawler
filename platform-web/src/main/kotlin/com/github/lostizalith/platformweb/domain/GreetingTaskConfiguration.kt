@@ -7,17 +7,13 @@ import org.apache.commons.lang3.StringUtils
  */
 class GreetingTaskConfiguration : TaskConfiguration {
 
-    var message: String = StringUtils.EMPTY
+    private var appName: String = StringUtils.EMPTY;
 
-    override fun getAppName(): String {
-        TODO("not implemented")
-    }
+    private var message: String = StringUtils.EMPTY
+
+    override fun appName() = appName
 
     override fun submit(appName: String, handler: TaskConfigurationHandling) = handler.handle(appName, this)
-
-    override fun postLoadHandle(appName: String) {
-        TODO("not implemented")
-    }
 
     override fun executorClass(): Class<out TaskExecutor> = GreetingTaskExecutor::class.java
 }

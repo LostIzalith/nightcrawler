@@ -7,11 +7,9 @@ import java.io.Serializable
  */
 interface TaskConfiguration : Serializable {
 
-    fun getAppName(): String
+    fun appName(): String
 
     fun submit(appName: String, handler: TaskConfigurationHandling): TaskResult
-
-    fun postLoadHandle(appName: String)
 
     fun executorClass(): Class<out TaskExecutor>
 }
