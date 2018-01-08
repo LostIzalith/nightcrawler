@@ -1,15 +1,19 @@
 package com.github.lostizalith.platformweb.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import org.apache.commons.lang3.StringUtils
 
 /**
  * Greeting task configuration.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class GreetingTaskConfiguration : TaskConfiguration {
 
-    private var appName: String = StringUtils.EMPTY;
+    @JsonIgnore
+    var appName: String = StringUtils.EMPTY;
 
-    private var message: String = StringUtils.EMPTY
+    var message: String = StringUtils.EMPTY
 
     override fun appName() = appName
 
