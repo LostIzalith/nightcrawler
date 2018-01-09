@@ -1,7 +1,7 @@
 package com.github.lostizalith.platformweb.application.mapping
 
-import com.github.lostizalith.platformweb.application.GreetingTaskConfigurationRequest
-import com.github.lostizalith.platformweb.domain.GreetingTaskConfiguration
+import com.github.lostizalith.platformweb.application.request.GreetingTaskConfigurationRequest
+import com.github.lostizalith.platformweb.domain.model.configuration.GreetingTaskConfiguration
 import org.dozer.loader.api.BeanMappingBuilder
 import org.dozer.loader.api.TypeMappingOptions.oneWay
 

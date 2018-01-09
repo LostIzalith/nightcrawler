@@ -1,5 +1,8 @@
-package com.github.lostizalith.platformweb.domain
+package com.github.lostizalith.platformweb.domain.handler
 
+import com.github.lostizalith.platformweb.domain.model.Task
+import com.github.lostizalith.platformweb.domain.model.TaskResult
+import com.github.lostizalith.platformweb.domain.model.configuration.GreetingTaskConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service

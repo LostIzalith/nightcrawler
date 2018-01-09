@@ -1,6 +1,7 @@
-package com.github.lostizalith.platformweb.application
+package com.github.lostizalith.platformweb.application.controller
 
-import com.github.lostizalith.platformweb.domain.TaskManagement
+import com.github.lostizalith.platformweb.application.request.TaskConfigurationRequest
+import com.github.lostizalith.platformweb.domain.management.TaskManagement
 import org.dozer.DozerBeanMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE

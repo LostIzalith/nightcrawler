@@ -1,5 +1,7 @@
-package com.github.lostizalith.platformweb.domain
+package com.github.lostizalith.platformweb.domain.executor
 
+import com.github.lostizalith.platformweb.domain.model.Result
+import com.github.lostizalith.platformweb.domain.model.configuration.TaskConfiguration
 import org.springframework.stereotype.Service
 
 @Service

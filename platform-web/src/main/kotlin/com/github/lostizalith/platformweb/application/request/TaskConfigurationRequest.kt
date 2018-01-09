@@ -1,8 +1,8 @@
-package com.github.lostizalith.platformweb.application
+package com.github.lostizalith.platformweb.application.request
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.github.lostizalith.platformweb.domain.TaskConfiguration
+import com.github.lostizalith.platformweb.domain.model.configuration.TaskConfiguration
 import java.io.Serializable
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
