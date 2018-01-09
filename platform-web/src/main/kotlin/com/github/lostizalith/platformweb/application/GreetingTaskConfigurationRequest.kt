@@ -6,9 +6,6 @@ import com.github.lostizalith.platformweb.domain.GreetingTaskConfiguration
 import com.github.lostizalith.platformweb.domain.TaskConfiguration
 import org.apache.commons.lang3.StringUtils
 
-/**
- * Greeting task configuration request.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class GreetingTaskConfigurationRequest : TaskConfigurationRequest {
 

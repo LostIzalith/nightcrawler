@@ -7,9 +7,6 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.type.filter.AssignableTypeFilter
 
-/**
- * Configuration for Dozer
- */
 @Configuration
 class DozerConfiguration {
 

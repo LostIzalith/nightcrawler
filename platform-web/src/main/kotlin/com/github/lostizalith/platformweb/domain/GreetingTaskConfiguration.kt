@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.apache.commons.lang3.StringUtils
 
-/**
- * Greeting task configuration.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class GreetingTaskConfiguration : TaskConfiguration {
 

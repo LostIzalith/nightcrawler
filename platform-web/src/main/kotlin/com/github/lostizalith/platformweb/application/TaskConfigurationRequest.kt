@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.github.lostizalith.platformweb.domain.TaskConfiguration
 import java.io.Serializable
 
-/**
- * Task configuration request entity.
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes(
         JsonSubTypes.Type(value = GreetingTaskConfigurationRequest::class, name = "greeting")
