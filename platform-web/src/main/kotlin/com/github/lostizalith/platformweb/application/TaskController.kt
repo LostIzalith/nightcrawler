@@ -3,7 +3,7 @@ package com.github.lostizalith.platformweb.application
 import com.github.lostizalith.platformweb.domain.TaskManagement
 import org.dozer.DozerBeanMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["/api/v1/{appName}/tasks"])
+@RequestMapping(value = ["/api/v1/{appName}/tasks"], produces = [APPLICATION_JSON_UTF8_VALUE])
 class TaskController(
         @Autowired private val dozerBeanMapper: DozerBeanMapper,
         @Autowired private val taskManagement: TaskManagement) {
@@ -23,6 +23,10 @@ class TaskController(
 
         val taskConfiguration = dozerBeanMapper.map(taskConfigurationRequest, taskConfigurationRequest.configurationClass())
 
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(taskConfiguration)
+        val taskResult = taskManagement.executeTask(taskConfiguration)
+
+        // TODO: map task result to response entity.
+
+        return ResponseEntity.ok().body(taskResult)
     }
 }

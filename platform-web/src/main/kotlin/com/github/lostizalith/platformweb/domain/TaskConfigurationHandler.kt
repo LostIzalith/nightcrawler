@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service
 @Service
 class TaskConfigurationHandler : TaskConfigurationHandling {
 
-    override fun handle(appName: String, configuration: GreetingTaskConfiguration): TaskResult {
-        TODO("not implemented")
+    override fun handle(appName: String, taskConfiguration: GreetingTaskConfiguration): TaskResult {
+        // TODO: not implemented yet.
+        // TODO: producer and consumer
+        // TODO: result manager
+
+        return TaskResult("string id", "CREATED", taskConfiguration, "SOME RESULT")
     }
 }
