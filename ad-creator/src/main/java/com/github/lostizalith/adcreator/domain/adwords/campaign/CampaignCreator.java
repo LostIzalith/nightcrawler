@@ -152,7 +152,10 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
     }
 
     private static void validateArguments(final AdWordsSession session, final List<CampaignItem> campaignItems) {
-        validateSession(session);
+        if (session == null) {
+            throw new IllegalArgumentException("AdWords session can't be null");
+        }
+
         if (CollectionUtils.isEmpty(campaignItems)) {
             throw new IllegalArgumentException("Campaign items can't be empty");
         }

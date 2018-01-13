@@ -23,10 +23,4 @@ public abstract class AbstractAdWordsItemCreator<T extends AdWordsItem> {
         item.setErrorMessage(errorMessage);
         return item;
     }
-
-    protected static void validateSession(final AdWordsSession session) {
-        if (session == null) {
-            throw new IllegalArgumentException("AdWords session can't be null");
-        }
-    }
 }
