@@ -1,7 +1,10 @@
 package com.github.lostizalith.adcreator.domain.adwords.campaign;
 
+import com.github.lostizalith.adcreator.domain.adwords.AbstractAdWordsItemCreator;
+import com.github.lostizalith.adcreator.domain.adwords.batch.BatchManager;
 import com.github.lostizalith.adcreator.domain.adwords.budget.BudgetCreator;
 import com.github.lostizalith.adcreator.domain.adwords.model.AdChannelType;
+import com.github.lostizalith.adcreator.domain.adwords.model.AdWordsItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.BudgetItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.CampaignItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.StrategyType;
@@ -21,22 +24,64 @@ import com.google.api.ads.adwords.axis.v201710.cm.Operator;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CampaignCreator {
+public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
     private final BudgetCreator budgetCreator;
 
     private final AdWordsServicesInterface adWordsServices = AdWordsServices.getInstance();
 
-    public CampaignItem create(final AdWordsSession session, final CampaignItem campaignItem) {
+    @Override
+    public List<CampaignItem> create(final AdWordsSession session, final List<CampaignItem> campaignItems) {
+
+        validateArguments(session, campaignItems);
+
+        //TODO check if campaign already exists
+
+        final List<Campaign> campaigns = campaignItems.stream()
+                .map(c -> createCampaign(session, c))
+                .collect(toList());
+
+        final List<CampaignOperation> campaignOperations = campaigns.stream()
+                .map(c -> {
+                    final CampaignOperation operation = new CampaignOperation();
+                    operation.setOperand(c);
+                    operation.setOperator(Operator.ADD);
+                    return operation;
+                }).collect(toList());
 
         final CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
+        final List<List<CampaignOperation>> batches = BatchManager.slitRequest(campaignOperations);
+        final Map<String, AdWordsItem> createdCampaigns = batches.stream()
+                .map(b -> mutate(campaignService, b.toArray(new CampaignOperation[b.size()])))
+                .flatMap(c -> c.entrySet().stream())
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        campaignItems.forEach(c -> {
+            final AdWordsItem adWordsItem = createdCampaigns.get(c.getName());
+            c.setId(adWordsItem.getId());
+            c.setStatus(adWordsItem.getStatus());
+            c.setErrorMessage(adWordsItem.getErrorMessage());
+        });
+
+        return campaignItems;
+    }
+
+    private Campaign createCampaign(final AdWordsSession session, final CampaignItem campaignItem) {
 
         final Campaign campaign = new Campaign();
         campaign.setName(campaignItem.getName());
@@ -66,22 +111,19 @@ public class CampaignCreator {
         networkSetting.setTargetPartnerSearchNetwork(false);
         campaign.setNetworkSetting(networkSetting);
 
-        // Create operations.
-        final CampaignOperation operation = new CampaignOperation();
-        operation.setOperand(campaign);
-        operation.setOperator(Operator.ADD);
+        return campaign;
+    }
 
-        final CampaignOperation[] operations = new CampaignOperation[]{operation};
-
-        CampaignReturnValue result;
+    private Map<String, AdWordsItem> mutate(final CampaignServiceInterface campaignService, final CampaignOperation[] operations) {
         try {
-            result = campaignService.mutate(operations);
-            campaignItem.setId(result.getValue(0).getId());
+            final CampaignReturnValue result = campaignService.mutate(operations);
+            return Arrays.stream(result.getValue())
+                    .collect(toMap(Campaign::getName, x -> fetchSuccessItem(x.getId())));
         } catch (RemoteException e) {
-            throw new IllegalStateException(e.getMessage(), e);
+            return Stream.of(operations)
+                    .map(o -> o.getOperand().getName())
+                    .collect(toMap(x -> x, x -> fetchErrorItem(e.getMessage())));
         }
-
-        return campaignItem;
     }
 
     private static BiddingStrategyType getBiddingStrategyType(final StrategyType strategyType) {
@@ -90,5 +132,12 @@ public class CampaignCreator {
 
     private static AdvertisingChannelType getAdvertisingChannelType(final AdChannelType adChannelType) {
         return AdvertisingChannelType.fromValue(adChannelType.name());
+    }
+
+    private static void validateArguments(final AdWordsSession session, final List<CampaignItem> campaignItems) {
+        validateSession(session);
+        if (CollectionUtils.isEmpty(campaignItems)) {
+            throw new IllegalArgumentException("Campaign items can't be empty");
+        }
     }
 }

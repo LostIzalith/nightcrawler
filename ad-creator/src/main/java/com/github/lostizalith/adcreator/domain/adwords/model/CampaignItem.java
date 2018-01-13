@@ -11,7 +11,7 @@ public class CampaignItem extends AdWordsItem {
 
     private BudgetItem budgetItem;
 
-    private CampaignStatus status;
+    private CampaignStatus campaignStatus;
 
     private StrategyType strategyType;
 

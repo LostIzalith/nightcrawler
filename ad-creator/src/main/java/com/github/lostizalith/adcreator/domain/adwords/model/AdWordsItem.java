@@ -9,4 +9,8 @@ public class AdWordsItem {
 
     private Long id;
 
+    private Status status;
+
+    private String errorMessage;
+
 }
