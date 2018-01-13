@@ -8,7 +8,6 @@ import com.github.lostizalith.adcreator.domain.adwords.model.AdWordsItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.BudgetItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.CampaignItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.StrategyType;
-import com.google.api.ads.adwords.axis.factory.AdWordsServices;
 import com.google.api.ads.adwords.axis.v201710.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201710.cm.BiddingStrategyConfiguration;
 import com.google.api.ads.adwords.axis.v201710.cm.BiddingStrategyType;
@@ -22,11 +21,10 @@ import com.google.api.ads.adwords.axis.v201710.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201710.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201710.cm.Operator;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
-import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -34,27 +32,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.github.lostizalith.adcreator.domain.adwords.AdWordsUtils.AD_WORDS_SERVICES;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-@Component
+@Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
+    private final CampaignFetcher campaignFetcher;
     private final BudgetCreator budgetCreator;
-
-    private final AdWordsServicesInterface adWordsServices = AdWordsServices.getInstance();
 
     @Override
     public List<CampaignItem> create(final AdWordsSession session, final List<CampaignItem> campaignItems) {
 
         validateArguments(session, campaignItems);
 
-        //TODO check if campaign already exists
-
-        final List<Campaign> campaigns = campaignItems.stream()
-                .map(c -> createCampaign(session, c))
-                .collect(toList());
+        final List<Campaign> campaigns = fetchCampaignToCreating(session, campaignItems);
 
         final List<CampaignOperation> campaignOperations = campaigns.stream()
                 .map(c -> {
@@ -64,7 +58,7 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
                     return operation;
                 }).collect(toList());
 
-        final CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
+        final CampaignServiceInterface campaignService = AD_WORDS_SERVICES.get(session, CampaignServiceInterface.class);
         final List<List<CampaignOperation>> batches = BatchManager.slitRequest(campaignOperations);
         final Map<String, AdWordsItem> createdCampaigns = batches.stream()
                 .map(b -> mutate(campaignService, b.toArray(new CampaignOperation[b.size()])))
@@ -79,6 +73,29 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
         });
 
         return campaignItems;
+    }
+
+    private List<Campaign> fetchCampaignToCreating(final AdWordsSession session, final List<CampaignItem> campaignItems) {
+
+        final List<String> campaignNames = campaignItems.stream()
+                .map(CampaignItem::getName)
+                .collect(toList());
+        final List<Campaign> adWordsCampaigns = campaignFetcher.fetch(session, campaignNames);
+        final Map<String, Long> name2CampaignId = adWordsCampaigns.stream()
+                .collect(toMap(Campaign::getName, Campaign::getId));
+
+        final List<CampaignItem> campaigns = campaignItems.stream()
+                .filter(c -> name2CampaignId.containsKey(c.getName()))
+                .peek(c -> {
+                    final AdWordsItem adWordsItem = fetchSuccessItem(name2CampaignId.get(c.getName()));
+                    c.setId(adWordsItem.getId());
+                    c.setStatus(adWordsItem.getStatus());
+                }).collect(toList());
+
+        return campaigns.stream()
+                .filter(c -> c.getId() == null)
+                .map(c -> createCampaign(session, c))
+                .collect(toList());
     }
 
     private Campaign createCampaign(final AdWordsSession session, final CampaignItem campaignItem) {
