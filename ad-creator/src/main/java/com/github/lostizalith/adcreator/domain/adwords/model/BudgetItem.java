@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class Budget {
+public class BudgetItem extends AdWordsItem {
+
+    private final String name;
 
     private final long amount;
 
-    private final String deliveryMethod;
+    private final BudgetDeliveryMethod deliveryMethod;
 
     private final boolean isShare;
 }

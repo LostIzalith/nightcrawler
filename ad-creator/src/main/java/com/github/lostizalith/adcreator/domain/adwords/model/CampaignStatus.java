@@ -13,5 +13,5 @@ public enum CampaignStatus {
 
     REMOVED("Removed");
 
-    private final String name;
+    private final String value;
 }

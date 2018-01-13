@@ -11,6 +11,6 @@ public enum BudgetDeliveryMethod {
 
     ACCELERATED("Accelerated");
 
-    private final String name;
+    private final String value;
 
 }

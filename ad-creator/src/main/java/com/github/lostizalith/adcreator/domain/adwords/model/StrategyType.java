@@ -25,5 +25,5 @@ public enum StrategyType {
 
     TARGET_OUTRANK_SHARE("Target outrank share");
 
-    private final String name;
+    private final String value;
 }

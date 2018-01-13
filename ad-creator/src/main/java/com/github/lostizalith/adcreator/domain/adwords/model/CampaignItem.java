@@ -5,13 +5,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Campaign {
+public class CampaignItem extends AdWordsItem {
 
     private String name;
 
-    private Budget budget;
+    private BudgetItem budgetItem;
 
     private CampaignStatus status;
 
     private StrategyType strategyType;
+
+    private AdChannelType adChannelType;
 }

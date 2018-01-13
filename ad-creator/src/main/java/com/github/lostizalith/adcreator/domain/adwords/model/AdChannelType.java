@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ChannelType {
+public enum AdChannelType {
 
     SEARCH("Search"),
 
