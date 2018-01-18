@@ -1,4 +1,4 @@
-package com.github.lostizalith.greeting;
+package com.github.lostizalith.greeting
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
