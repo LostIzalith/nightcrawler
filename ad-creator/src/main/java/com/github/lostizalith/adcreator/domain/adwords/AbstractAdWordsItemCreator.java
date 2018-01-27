@@ -23,4 +23,10 @@ public abstract class AbstractAdWordsItemCreator<T extends AdWordsItem> {
         item.setErrorMessage(errorMessage);
         return item;
     }
+
+    protected static void setCreationResult(final AdWordsItem target, final AdWordsItem source) {
+        target.setId(source.getId());
+        target.setStatus(source.getStatus());
+        target.setErrorMessage(source.getErrorMessage());
+    }
 }

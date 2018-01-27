@@ -65,12 +65,7 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
                 .flatMap(c -> c.entrySet().stream())
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        campaignItems.forEach(c -> {
-            final AdWordsItem adWordsItem = createdCampaigns.get(c.getName());
-            c.setId(adWordsItem.getId());
-            c.setStatus(adWordsItem.getStatus());
-            c.setErrorMessage(adWordsItem.getErrorMessage());
-        });
+        campaignItems.forEach(c -> setCreationResult(c, createdCampaigns.get(c.getName())));
 
         return campaignItems;
     }
@@ -84,15 +79,13 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
         final Map<String, Long> name2CampaignId = adWordsCampaigns.stream()
                 .collect(toMap(Campaign::getName, Campaign::getId));
 
-        final List<CampaignItem> campaigns = campaignItems.stream()
-                .filter(c -> name2CampaignId.containsKey(c.getName()))
-                .peek(c -> {
-                    final AdWordsItem adWordsItem = fetchSuccessItem(name2CampaignId.get(c.getName()));
-                    c.setId(adWordsItem.getId());
-                    c.setStatus(adWordsItem.getStatus());
-                }).collect(toList());
+        campaignItems.forEach(c -> {
+            if (name2CampaignId.containsKey(c.getName())) {
+                setCreationResult(c, fetchSuccessItem(name2CampaignId.get(c.getName())));
+            }
+        });
 
-        return campaigns.stream()
+        return campaignItems.stream()
                 .filter(c -> c.getId() == null)
                 .map(c -> createCampaign(session, c))
                 .collect(toList());

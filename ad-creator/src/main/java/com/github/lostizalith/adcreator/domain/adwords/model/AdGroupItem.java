@@ -2,14 +2,17 @@ package com.github.lostizalith.adcreator.domain.adwords.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import java.util.Map;
-
+@Setter
 @Getter
 @RequiredArgsConstructor
-public class SelectorPredicate {
+public class AdGroupItem extends AdWordsItem {
 
-    private final String[] fields;
+    private String name;
 
-    private final Map<String, String[]> inPredicate;
+    private Long campaignId;
+
+    private Long amount;
+
 }
