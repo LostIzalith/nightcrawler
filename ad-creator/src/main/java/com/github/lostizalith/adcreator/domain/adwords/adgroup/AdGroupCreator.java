@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.github.lostizalith.adcreator.domain.adwords.AdWordsUtils.AD_WORDS_SERVICES;
+import static com.github.lostizalith.adcreator.domain.adwords.AdWordsUtils.AMOUNT_FACTOR;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -41,8 +42,6 @@ import static java.util.stream.Collectors.toMap;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
-
-    private static final long AMOUNT_FACTOR = 1000_000;
 
     private final AdGroupFetcher adGroupFetcher;
 
