@@ -66,6 +66,7 @@ my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running   2          71d
 
 ```bash
 $ kubectl scale --replicas=4 -f k8s/greeting/greeting.yaml
+
 $ kubectl get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
 greeting-56bf77749c-6vhrq                1/1       Running   0          0s
@@ -74,6 +75,7 @@ greeting-56bf77749c-pm2d6                1/1       Running   0          8m
 greeting-56bf77749c-zk9c7                1/1       Running   0          0s
 hello-minikube-5bc754d4cd-lsfjr          1/1       Running   0          10m
 my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running   2          71d
+
 $ kubectl get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
 greeting-56bf77749c-6vhrq                1/1       Running   0          18s

@@ -1,22 +1,23 @@
-## Demo - Greeting App deployed on Kubernetes
+# Demo - Greeting App deployed on Kubernetes
 
 Simple Spring Boot app deployment on Minikube
 
-#### Start Minikube
+## Start Minikube
 
-- Install Minikube from https://kubernetes.io/docs/tasks/tools/install-minikube/
+- [Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
-- Install `kubectl` from https://kubernetes.io/docs/tasks/tools/install-kubectl/
+- [Install `kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 Then, start Minikube:
 
-	minikube start
+    minikube start
 
-#### Create and run a simple Spring Boot app
+## Create and run a simple Spring Boot app
 
-Create a simple Boot app (You can also use https://start.spring.io/[Spring Initializr] web interface)
+Create a simple Boot app (You can also use [Spring Initializr](https://start.spring.io/) web interface)
 
 `src/main/kotlin/com/github/lostizalith/greeting/GreetingApplication.kt`
+
 ```kotlin
 package com.github.lostizalith.greeting
 
@@ -35,6 +36,7 @@ fun main(args: Array<String>) {
 ```
 
 `src/main/kotlin/com/github/lostizalith/greeting/domain/Greeting.kt`
+
 ```kotlin
 package com.github.lostizalith.greeting.domain
 
@@ -45,6 +47,7 @@ data class Greeting(var id: Long, var name: String)
 ```
 
 `src/main/kotlin/com/github/lostizalith/greeting/application/controller/GreetingController.kt`
+
 ```kotlin
 package com.github.lostizalith.greeting.application.controller
 
@@ -79,9 +82,9 @@ class GreetingController(@Autowired val mapper: DozerBeanMapper) {
     }
 }
 ```
+
 Create a `Dockerfile` so we can package this app as a Docker image
 
-`Dockerfile`
 ````dockerfile
 FROM openjdk:8-alpine
 ADD ./target/greeting-0.0.1-SNAPSHOT.jar /greeting.jar
@@ -121,13 +124,15 @@ curl $(minikube service greeting-svc --url)/application/env
 ```
 
 Create Deployment and Service YAML files for future repeatable deployments
-ProTip from Joe Beda at Heptio: https://blog.heptio.com/using-kubectl-to-jumpstart-a-yaml-file-heptioprotip-6f5b8a63a3ea
+ProTip from [Joe Beda at Heptio](https://blog.heptio.com/using-kubectl-to-jumpstart-a-yaml-file-heptioprotip-6f5b8a63a3ea)
+
 ```bash
 kubectl run greeting --replicas=2 --image $DOCKER_ID_USER/greeting:0.0.1 --port 8080 -o yaml --dry-run > greeting.yaml
 kubectl expose deployment greeting --type=LoadBalancer --name=greeting-svc -o yaml --dry-run > greeting-svc.yaml
 ```
 
 Delete the resources created for `greeting`
+
 ```bash
 kubectl delete all -l run=greeting
 ```
