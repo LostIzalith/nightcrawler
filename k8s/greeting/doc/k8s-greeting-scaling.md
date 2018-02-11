@@ -47,8 +47,6 @@ NAME                                     READY     STATUS        RESTARTS   AGE
 greeting-56bf77749c-b85b8                1/1       Running       0          0s
 greeting-56bf77749c-c6qdl                0/1       Terminating   0          4m
 greeting-56bf77749c-pm2d6                1/1       Running       0          4m
-hello-minikube-5bc754d4cd-lsfjr          1/1       Running       0          6m
-my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running       2          71d
 ```
 
 ## Wait a few seconds
@@ -58,8 +56,6 @@ $ kubectl get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
 greeting-56bf77749c-b85b8                1/1       Running   0          1m
 greeting-56bf77749c-pm2d6                1/1       Running   0          5m
-hello-minikube-5bc754d4cd-lsfjr          1/1       Running   0          7m
-my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running   2          71d
 ```
 
 ## To manual scaling you can use
@@ -73,8 +69,6 @@ greeting-56bf77749c-6vhrq                1/1       Running   0          0s
 greeting-56bf77749c-b85b8                1/1       Running   0          3m
 greeting-56bf77749c-pm2d6                1/1       Running   0          8m
 greeting-56bf77749c-zk9c7                1/1       Running   0          0s
-hello-minikube-5bc754d4cd-lsfjr          1/1       Running   0          10m
-my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running   2          71d
 
 $ kubectl get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
@@ -82,6 +76,4 @@ greeting-56bf77749c-6vhrq                1/1       Running   0          18s
 greeting-56bf77749c-b85b8                1/1       Running   0          4m
 greeting-56bf77749c-pm2d6                1/1       Running   0          8m
 greeting-56bf77749c-zk9c7                1/1       Running   0          18s
-hello-minikube-5bc754d4cd-lsfjr          1/1       Running   0          10m
-my-release-postgresql-74b6ddfcfb-hcrv2   1/1       Running   2          71d
 ```
