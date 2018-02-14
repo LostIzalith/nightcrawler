@@ -221,7 +221,7 @@ spec:
 ## Checkout history again
 
 ```bash
-kubectl rollout history deployment greeting-deployment
+$ kubectl rollout history deployment greeting-deployment
 deployments "greeting-deployment"
 REVISION  CHANGE-CAUSE
 2         none
@@ -231,5 +231,5 @@ REVISION  CHANGE-CAUSE
 ## To rollout ro explicit revision it possible to
 
 ```bash
-$ kubectl rollout undo deployment greeting-deployment --to-revision=3
-``` 
+kubectl rollout undo deployment greeting-deployment --to-revision=3
+```

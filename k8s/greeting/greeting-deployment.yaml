@@ -7,7 +7,7 @@ spec:
   template:
     metadata:
       labels:
-        run: greeting
+        app: greeting
     spec:
       containers:
       - name: greeting
