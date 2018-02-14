@@ -23,7 +23,7 @@ class GreetingController(@Autowired val mapper: DozerBeanMapper) {
 
     @GetMapping(value = ["/greeting"])
     fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String): ResponseEntity<*> {
-        val request = Greeting(counter.getAndIncrement(), "Hello $name !")
+        val request = Greeting(counter.getAndIncrement(), "Hello $name ! v2")
 
         val response = mapper.map(request, GreetingResponse::class.java)
 
