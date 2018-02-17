@@ -7,6 +7,8 @@ import com.github.lostizalith.adcreator.domain.adwords.model.AdChannelType;
 import com.github.lostizalith.adcreator.domain.adwords.model.AdWordsItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.BudgetItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.CampaignItem;
+import com.github.lostizalith.adcreator.domain.adwords.model.GeoTargetType;
+import com.github.lostizalith.adcreator.domain.adwords.model.StrategyGoalType;
 import com.github.lostizalith.adcreator.domain.adwords.model.StrategyType;
 import com.google.api.ads.adwords.axis.v201710.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201710.cm.BiddingStrategyConfiguration;
@@ -17,9 +19,15 @@ import com.google.api.ads.adwords.axis.v201710.cm.CampaignOperation;
 import com.google.api.ads.adwords.axis.v201710.cm.CampaignReturnValue;
 import com.google.api.ads.adwords.axis.v201710.cm.CampaignServiceInterface;
 import com.google.api.ads.adwords.axis.v201710.cm.CampaignStatus;
+import com.google.api.ads.adwords.axis.v201710.cm.GeoTargetTypeSetting;
+import com.google.api.ads.adwords.axis.v201710.cm.GeoTargetTypeSettingNegativeGeoTargetType;
+import com.google.api.ads.adwords.axis.v201710.cm.GeoTargetTypeSettingPositiveGeoTargetType;
 import com.google.api.ads.adwords.axis.v201710.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201710.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201710.cm.Operator;
+import com.google.api.ads.adwords.axis.v201710.cm.Setting;
+import com.google.api.ads.adwords.axis.v201710.cm.UniversalAppBiddingStrategyGoalType;
+import com.google.api.ads.adwords.axis.v201710.cm.UniversalAppCampaignSetting;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
@@ -121,6 +129,15 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
         networkSetting.setTargetPartnerSearchNetwork(false);
         campaign.setNetworkSetting(networkSetting);
 
+        final UniversalAppCampaignSetting universalAppSetting = new UniversalAppCampaignSetting();
+        universalAppSetting.setUniversalAppBiddingStrategyGoalType(getUniversalAppBiddingStrategyGoalType(campaignItem.getStrategyGoalType()));
+
+        final GeoTargetTypeSetting geoSetting = new GeoTargetTypeSetting();
+        geoSetting.setPositiveGeoTargetType(getGeoTargetTypeSettingPositiveGeoTargetType(campaignItem.getPositiveGoalTargetType()));
+        geoSetting.setNegativeGeoTargetType(getGeoTargetTypeSettingNegativeGeoTargetType(campaignItem.getNegativeGoalTargetType()));
+
+        campaign.setSettings(new Setting[]{universalAppSetting, geoSetting});
+
         return campaign;
     }
 
@@ -142,6 +159,18 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
     private static AdvertisingChannelType getAdvertisingChannelType(final AdChannelType adChannelType) {
         return AdvertisingChannelType.fromValue(adChannelType.name());
+    }
+
+    private static UniversalAppBiddingStrategyGoalType getUniversalAppBiddingStrategyGoalType(final StrategyGoalType strategyGoalType) {
+        return UniversalAppBiddingStrategyGoalType.fromValue(strategyGoalType.name());
+    }
+
+    private static GeoTargetTypeSettingPositiveGeoTargetType getGeoTargetTypeSettingPositiveGeoTargetType(final GeoTargetType geoTargetType) {
+        return GeoTargetTypeSettingPositiveGeoTargetType.fromValue(geoTargetType.name());
+    }
+
+    private static GeoTargetTypeSettingNegativeGeoTargetType getGeoTargetTypeSettingNegativeGeoTargetType(final GeoTargetType geoTargetType) {
+        return GeoTargetTypeSettingNegativeGeoTargetType.fromValue(geoTargetType.name());
     }
 
     private static void validateArguments(final AdWordsSession session, final List<CampaignItem> campaignItems) {

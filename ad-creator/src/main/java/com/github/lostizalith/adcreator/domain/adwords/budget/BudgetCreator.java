@@ -26,13 +26,14 @@ public class BudgetCreator {
         final Money budgetAmount = new Money();
         budgetAmount.setMicroAmount(budgetItem.getAmount());
 
-        final Budget sharedBudget = new Budget();
-        sharedBudget.setName(budgetItem.getName());
-        sharedBudget.setAmount(budgetAmount);
-        sharedBudget.setDeliveryMethod(getDeliveryMethod(budgetItem.getDeliveryMethod()));
+        final Budget budget = new Budget();
+        budget.setIsExplicitlyShared(false);
+        budget.setName(budgetItem.getName());
+        budget.setAmount(budgetAmount);
+        budget.setDeliveryMethod(getDeliveryMethod(budgetItem.getDeliveryMethod()));
 
         final BudgetOperation budgetOperation = new BudgetOperation();
-        budgetOperation.setOperand(sharedBudget);
+        budgetOperation.setOperand(budget);
         budgetOperation.setOperator(Operator.ADD);
 
         Long budgetId;

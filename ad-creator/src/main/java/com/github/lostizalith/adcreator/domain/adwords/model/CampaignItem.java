@@ -16,4 +16,10 @@ public class CampaignItem extends AdWordsItem {
     private StrategyType strategyType;
 
     private AdChannelType adChannelType;
+
+    private StrategyGoalType strategyGoalType;
+
+    private GeoTargetType positiveGoalTargetType;
+
+    private GeoTargetType negativeGoalTargetType;
 }

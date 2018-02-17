@@ -76,7 +76,6 @@ public class KeywordCreator extends AbstractAdWordsItemCreator<KeywordItem> {
         final BiddableAdGroupCriterion keywordBiddableAdGroupCriterion = new BiddableAdGroupCriterion();
         keywordBiddableAdGroupCriterion.setAdGroupId(keywordItem.getAdGroupId());
         keywordBiddableAdGroupCriterion.setCriterion(keyword);
-
         keywordBiddableAdGroupCriterion.setUserStatus(UserStatus.PAUSED);
         keywordBiddableAdGroupCriterion.setFinalUrls(new UrlList(new String[]{keywordItem.getFinalUrl()}));
 

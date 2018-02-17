@@ -13,6 +13,6 @@ public class AdGroupItem extends AdWordsItem {
 
     private Long campaignId;
 
-    private Long amount;
+    private Long bidAmount;
 
 }

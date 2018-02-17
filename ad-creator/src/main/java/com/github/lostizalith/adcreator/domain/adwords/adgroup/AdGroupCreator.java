@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 import static com.github.lostizalith.adcreator.domain.adwords.AdWordsUtils.AD_WORDS_SERVICES;
 import static com.github.lostizalith.adcreator.domain.adwords.AdWordsUtils.AMOUNT_FACTOR;
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -75,7 +75,7 @@ public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
     private List<AdGroup> fetchAdGroupsToCreating(final AdWordsSession session, final List<AdGroupItem> adGroupItems) {
 
         final Map<Long, List<String>> adGroupsByCampaignId = adGroupItems.stream()
-                .collect(toMap(AdGroupItem::getCampaignId, g -> asList(g.getName()), AdGroupCreator::resolveCollisions));
+                .collect(toMap(AdGroupItem::getCampaignId, g -> singletonList(g.getName()), AdGroupCreator::resolveCollisions));
 
         final List<AdGroup> createdAdGroups = adGroupsByCampaignId.entrySet().stream()
                 .map(e -> adGroupFetcher.fetch(session, e.getValue(), e.getKey().toString()))
@@ -129,7 +129,7 @@ public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
 
         final BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
         final CpcBid bid = new CpcBid();
-        bid.setBid(new Money(null, adGroupItem.getAmount() * AMOUNT_FACTOR));
+        bid.setBid(new Money(null, adGroupItem.getBidAmount() * AMOUNT_FACTOR));
         biddingStrategyConfiguration.setBids(new Bids[]{bid});
         adGroup.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 

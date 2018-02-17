@@ -21,7 +21,7 @@ public class AdWordsConfiguration {
     private String refreshToken;
 
     @Bean
-    private Credential credential() {
+    public Credential credential() {
         try {
             return new OfflineCredentials.Builder()
                     .forApi(OfflineCredentials.Api.ADWORDS)
