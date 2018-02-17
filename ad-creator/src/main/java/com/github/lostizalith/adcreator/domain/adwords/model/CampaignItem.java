@@ -1,5 +1,10 @@
 package com.github.lostizalith.adcreator.domain.adwords.model;
 
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.AdChannelType;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.CampaignStatus;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.GeoTargetType;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.StrategyGoalType;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.StrategyType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package com.github.lostizalith.adcreator.domain.adwords.budget;
 
-import com.github.lostizalith.adcreator.domain.adwords.model.BudgetDeliveryMethod;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.BudgetDeliveryMethod;
 import com.github.lostizalith.adcreator.domain.adwords.model.BudgetItem;
 import com.google.api.ads.adwords.axis.factory.AdWordsServices;
 import com.google.api.ads.adwords.axis.v201710.cm.Budget;

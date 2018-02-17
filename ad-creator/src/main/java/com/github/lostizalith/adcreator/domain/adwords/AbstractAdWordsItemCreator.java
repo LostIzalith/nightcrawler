@@ -1,7 +1,7 @@
 package com.github.lostizalith.adcreator.domain.adwords;
 
 import com.github.lostizalith.adcreator.domain.adwords.model.AdWordsItem;
-import com.github.lostizalith.adcreator.domain.adwords.model.Status;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.Status;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 
 import java.util.List;

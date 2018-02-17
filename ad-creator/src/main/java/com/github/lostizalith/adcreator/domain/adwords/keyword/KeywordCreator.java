@@ -4,7 +4,7 @@ import com.github.lostizalith.adcreator.domain.adwords.AbstractAdWordsItemCreato
 import com.github.lostizalith.adcreator.domain.adwords.batch.BatchManager;
 import com.github.lostizalith.adcreator.domain.adwords.model.AdWordsItem;
 import com.github.lostizalith.adcreator.domain.adwords.model.KeywordItem;
-import com.github.lostizalith.adcreator.domain.adwords.model.MatchType;
+import com.github.lostizalith.adcreator.domain.adwords.model.enumeration.MatchType;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroupCriterionOperation;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroupCriterionReturnValue;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroupCriterionServiceInterface;

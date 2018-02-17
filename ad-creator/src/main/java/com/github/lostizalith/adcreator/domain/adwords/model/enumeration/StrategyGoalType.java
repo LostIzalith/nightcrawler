@@ -1,4 +1,4 @@
-package com.github.lostizalith.adcreator.domain.adwords.model;
+package com.github.lostizalith.adcreator.domain.adwords.model.enumeration;
 
 public enum StrategyGoalType {
 
