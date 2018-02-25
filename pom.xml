@@ -21,6 +21,7 @@
     <modules>
         <module>ad-creator</module>
         <module>greeting</module>
+        <module>common-adwords</module>
     </modules>
 
     <properties>
