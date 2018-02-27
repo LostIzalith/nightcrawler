@@ -7,6 +7,7 @@ import com.google.api.ads.adwords.axis.v201710.cm.Criterion;
 import com.google.api.ads.adwords.axis.v201710.cm.Operator;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import static com.github.lostizalith.common.adwords.domain.AdWordsUtils.AD_WORDS_SERVICES;
 
 @Slf4j
+@Service
 public class TargetingSettingsConfigurer {
 
     protected void mutate(final AdWordsSession session, final Long campaignId, final List<Criterion> criteria) {

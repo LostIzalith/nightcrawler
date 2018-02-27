@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.rmi.RemoteException;
 
+import static com.github.lostizalith.common.adwords.domain.AdWordsUtils.AMOUNT_FACTOR;
+
 @Component
 public class BudgetCreator {
 
@@ -24,7 +26,7 @@ public class BudgetCreator {
         final BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
 
         final Money budgetAmount = new Money();
-        budgetAmount.setMicroAmount(budgetItem.getAmount());
+        budgetAmount.setMicroAmount(budgetItem.getAmount() * AMOUNT_FACTOR);
 
         final Budget budget = new Budget();
         budget.setIsExplicitlyShared(false);

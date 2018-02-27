@@ -132,12 +132,6 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
         final UniversalAppCampaignSetting universalAppSetting = new UniversalAppCampaignSetting();
         universalAppSetting.setUniversalAppBiddingStrategyGoalType(getUniversalAppBiddingStrategyGoalType(campaignItem.getStrategyGoalType()));
 
-        final GeoTargetTypeSetting geoSetting = new GeoTargetTypeSetting();
-        geoSetting.setPositiveGeoTargetType(getGeoTargetTypeSettingPositiveGeoTargetType(campaignItem.getPositiveGoalTargetType()));
-        geoSetting.setNegativeGeoTargetType(getGeoTargetTypeSettingNegativeGeoTargetType(campaignItem.getNegativeGoalTargetType()));
-
-        campaign.setSettings(new Setting[]{universalAppSetting, geoSetting});
-
         return campaign;
     }
 
@@ -154,23 +148,23 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
     }
 
     private static BiddingStrategyType getBiddingStrategyType(final StrategyType strategyType) {
-        return BiddingStrategyType.fromValue(strategyType.name());
+        return strategyType == null ? null : BiddingStrategyType.fromValue(strategyType.name());
     }
 
     private static AdvertisingChannelType getAdvertisingChannelType(final AdChannelType adChannelType) {
-        return AdvertisingChannelType.fromValue(adChannelType.name());
+        return adChannelType == null ? null : AdvertisingChannelType.fromValue(adChannelType.name());
     }
 
     private static UniversalAppBiddingStrategyGoalType getUniversalAppBiddingStrategyGoalType(final StrategyGoalType strategyGoalType) {
-        return UniversalAppBiddingStrategyGoalType.fromValue(strategyGoalType.name());
+        return strategyGoalType == null ? null : UniversalAppBiddingStrategyGoalType.fromValue(strategyGoalType.name());
     }
 
     private static GeoTargetTypeSettingPositiveGeoTargetType getGeoTargetTypeSettingPositiveGeoTargetType(final GeoTargetType geoTargetType) {
-        return GeoTargetTypeSettingPositiveGeoTargetType.fromValue(geoTargetType.name());
+        return geoTargetType == null ? null : GeoTargetTypeSettingPositiveGeoTargetType.fromValue(geoTargetType.name());
     }
 
     private static GeoTargetTypeSettingNegativeGeoTargetType getGeoTargetTypeSettingNegativeGeoTargetType(final GeoTargetType geoTargetType) {
-        return GeoTargetTypeSettingNegativeGeoTargetType.fromValue(geoTargetType.name());
+        return geoTargetType == null ? null : GeoTargetTypeSettingNegativeGeoTargetType.fromValue(geoTargetType.name());
     }
 
     private static void validateArguments(final AdWordsSession session, final List<CampaignItem> campaignItems) {
