@@ -1,4 +1,4 @@
-package com.github.lostizalith.adcreator.domain.generator;
+package com.github.lostizalith.adcreator.domain.utils.generator;
 
 import com.github.lostizalith.common.adwords.domain.model.KeywordItem;
 import com.github.lostizalith.common.adwords.domain.model.enumeration.MatchType;

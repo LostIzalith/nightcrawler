@@ -4,6 +4,7 @@ import com.github.lostizalith.common.adwords.domain.AbstractAdWordsItemCreator;
 import com.github.lostizalith.common.adwords.domain.batch.BatchManager;
 import com.github.lostizalith.common.adwords.domain.model.AdGroupItem;
 import com.github.lostizalith.common.adwords.domain.model.AdWordsItem;
+import com.github.lostizalith.common.utils.CollisionsResolver;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroup;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroupAdRotationMode;
 import com.google.api.ads.adwords.axis.v201710.cm.AdGroupOperation;
@@ -44,6 +45,7 @@ import static java.util.stream.Collectors.toMap;
 public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
 
     private final AdGroupFetcher adGroupFetcher;
+    private final AdGroupItemsCreator adGroupItemsCreator;
 
     @Override
     public List<AdGroupItem> create(final AdWordsSession session, final List<AdGroupItem> adGroupItems) {
@@ -69,13 +71,13 @@ public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
 
         adGroupItems.forEach(g -> setCreationResult(g, createdAdGroups.get(g.getName())));
 
-        return adGroupItems;
+        return adGroupItemsCreator.create(session, adGroupItems);
     }
 
     private List<AdGroup> fetchAdGroupsToCreating(final AdWordsSession session, final List<AdGroupItem> adGroupItems) {
 
         final Map<Long, List<String>> adGroupsByCampaignId = adGroupItems.stream()
-                .collect(toMap(AdGroupItem::getCampaignId, g -> singletonList(g.getName()), AdGroupCreator::resolveCollisions));
+                .collect(toMap(AdGroupItem::getCampaignId, g -> singletonList(g.getName()), CollisionsResolver::concat));
 
         final List<AdGroup> createdAdGroups = adGroupsByCampaignId.entrySet().stream()
                 .map(e -> adGroupFetcher.fetch(session, e.getValue(), e.getKey().toString()))
@@ -94,13 +96,6 @@ public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
         return adGroupItems.stream()
                 .filter(g -> g.getId() == null)
                 .map(this::createAdGroup)
-                .collect(toList());
-
-    }
-
-    private static List<String> resolveCollisions(final List<String> e1, final List<String> e2) {
-        return Stream.concat(e1.stream(), e2.stream())
-                .distinct()
                 .collect(toList());
     }
 
@@ -127,11 +122,13 @@ public class AdGroupCreator extends AbstractAdWordsItemCreator<AdGroupItem> {
         final AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.OPTIMIZE);
         adGroup.setAdGroupAdRotationMode(rotationMode);
 
-        final BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
-        final CpcBid bid = new CpcBid();
-        bid.setBid(new Money(null, adGroupItem.getBidAmount() * AMOUNT_FACTOR));
-        biddingStrategyConfiguration.setBids(new Bids[]{bid});
-        adGroup.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
+        if (adGroupItem.getBidAmount() != null) {
+            final BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
+            final CpcBid bid = new CpcBid();
+            bid.setBid(new Money(null, adGroupItem.getBidAmount() * AMOUNT_FACTOR));
+            biddingStrategyConfiguration.setBids(new Bids[]{bid});
+            adGroup.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
+        }
 
         return adGroup;
     }

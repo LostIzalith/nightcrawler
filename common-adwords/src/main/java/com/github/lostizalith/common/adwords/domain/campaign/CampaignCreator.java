@@ -50,6 +50,7 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
     private final CampaignFetcher campaignFetcher;
     private final BudgetCreator budgetCreator;
+    private final CampaignItemsCreator campaignItemsCreator;
 
     @Override
     public List<CampaignItem> create(final AdWordsSession session, final List<CampaignItem> campaignItems) {
@@ -75,7 +76,7 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
         campaignItems.forEach(c -> setCreationResult(c, createdCampaigns.get(c.getName())));
 
-        return campaignItems;
+        return campaignItemsCreator.create(session, campaignItems);
     }
 
     private List<Campaign> fetchCampaignToCreating(final AdWordsSession session, final List<CampaignItem> campaignItems) {
@@ -157,14 +158,6 @@ public class CampaignCreator extends AbstractAdWordsItemCreator<CampaignItem> {
 
     private static UniversalAppBiddingStrategyGoalType getUniversalAppBiddingStrategyGoalType(final StrategyGoalType strategyGoalType) {
         return strategyGoalType == null ? null : UniversalAppBiddingStrategyGoalType.fromValue(strategyGoalType.name());
-    }
-
-    private static GeoTargetTypeSettingPositiveGeoTargetType getGeoTargetTypeSettingPositiveGeoTargetType(final GeoTargetType geoTargetType) {
-        return geoTargetType == null ? null : GeoTargetTypeSettingPositiveGeoTargetType.fromValue(geoTargetType.name());
-    }
-
-    private static GeoTargetTypeSettingNegativeGeoTargetType getGeoTargetTypeSettingNegativeGeoTargetType(final GeoTargetType geoTargetType) {
-        return geoTargetType == null ? null : GeoTargetTypeSettingNegativeGeoTargetType.fromValue(geoTargetType.name());
     }
 
     private static void validateArguments(final AdWordsSession session, final List<CampaignItem> campaignItems) {
