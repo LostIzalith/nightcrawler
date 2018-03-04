@@ -21,6 +21,8 @@ public class AdGroupItem extends AdWordsItem {
 
     private List<KeywordItem> keywordItems;
 
+    private List<ExpandedTextAdItem> expandedTextAdItems;
+
     public static AdGroupItem anAdGroupItem(final String name) {
         if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("AdGroup name can't be empty");

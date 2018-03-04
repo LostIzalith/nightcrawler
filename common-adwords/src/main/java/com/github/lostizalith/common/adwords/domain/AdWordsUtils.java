@@ -9,6 +9,8 @@ public class AdWordsUtils {
 
     public static final int PAGE_SIZE = 100;
 
+    public static final int MAX_BATCH_SIZE = 2000;
+
     public static final long AMOUNT_FACTOR = 1000_000;
 
 }

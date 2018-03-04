@@ -20,14 +20,15 @@ import static java.util.stream.Collectors.toList;
 public class AdGroupsGenerator {
 
     private final KeywordsGenerator keywordsGenerator;
+    private final ExpandedTextAdGenerator expandedTextAdGenerator;
 
     public List<AdGroupItem> generate(final MatchType matchType, final int number) {
         return IntStream.range(0, number)
                 .mapToObj(i -> {
                     final String name = UUID.randomUUID().toString();
                     final AdGroupItem adGroupItem = AdGroupItem.anAdGroupItem(name);
+                    adGroupItem.setExpandedTextAdItems(expandedTextAdGenerator.generate(number));
                     adGroupItem.setKeywordItems(keywordsGenerator.generate(matchType, number));
-
                     return adGroupItem;
                 }).collect(toList());
     }

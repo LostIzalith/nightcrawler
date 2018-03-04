@@ -1,7 +1,9 @@
 package com.github.lostizalith.common.adwords.domain.adgroup;
 
+import com.github.lostizalith.common.adwords.domain.ad.ExpandedTextAdCreator;
 import com.github.lostizalith.common.adwords.domain.keyword.KeywordCreator;
 import com.github.lostizalith.common.adwords.domain.model.AdGroupItem;
+import com.github.lostizalith.common.adwords.domain.model.ExpandedTextAdItem;
 import com.github.lostizalith.common.adwords.domain.model.KeywordItem;
 import com.github.lostizalith.common.utils.CollisionsResolver;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
@@ -22,8 +24,10 @@ import static java.util.stream.Collectors.toMap;
 public class AdGroupItemsCreator {
 
     private final KeywordCreator keywordCreator;
+    private final ExpandedTextAdCreator expandedTextAdCreator;
 
-    public List<AdGroupItem> create(final AdWordsSession session, final List<AdGroupItem> adGroupItems) {
+    public List<AdGroupItem> create(final AdWordsSession session,
+                                    final List<AdGroupItem> adGroupItems) {
 
         final List<AdGroupItem> successGroups = adGroupItems.stream()
                 .filter(g -> Objects.nonNull(g.getId()))
@@ -38,7 +42,20 @@ public class AdGroupItemsCreator {
         final Map<Long, List<KeywordItem>> keywordsByGroupsId = createdKeywordItems.stream()
                 .collect(toMap(KeywordItem::getAdGroupId, Arrays::asList, CollisionsResolver::concat));
 
-        adGroupItems.forEach(g -> g.setKeywordItems(keywordsByGroupsId.get(g.getId())));
+        final List<ExpandedTextAdItem> expandedTextAdItems = successGroups.stream()
+                .peek(g -> g.getExpandedTextAdItems().forEach(ad -> ad.setAdGroupId(g.getId())))
+                .flatMap(g -> g.getExpandedTextAdItems().stream())
+                .collect(toList());
+
+
+        final List<ExpandedTextAdItem> createdAdsItems = expandedTextAdCreator.create(session, expandedTextAdItems);
+        final Map<Long, List<ExpandedTextAdItem>> adsByGroupsId = createdAdsItems.stream()
+                .collect(toMap(ExpandedTextAdItem::getAdGroupId, Arrays::asList, CollisionsResolver::concat));
+
+        adGroupItems.forEach(g -> {
+            g.setKeywordItems(keywordsByGroupsId.get(g.getId()));
+            g.setExpandedTextAdItems(adsByGroupsId.get(g.getId()));
+        });
 
         return adGroupItems;
     }

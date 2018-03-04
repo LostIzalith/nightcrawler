@@ -6,16 +6,16 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.lostizalith.common.adwords.domain.AdWordsUtils.MAX_BATCH_SIZE;
+
 public class BatchManager {
 
-    private static final int MAX_BATCH_SIZE = 2000;
+    public static <T> List<List<T>> slitRequest(List<T> items) {
 
-    public static <T> List<List<T>> slitRequest(List<T> operations) {
-
-        if (CollectionUtils.isEmpty(operations)) {
+        if (CollectionUtils.isEmpty(items)) {
             return Collections.emptyList();
         }
 
-        return Lists.partition(operations, MAX_BATCH_SIZE);
+        return Lists.partition(items, MAX_BATCH_SIZE);
     }
 }

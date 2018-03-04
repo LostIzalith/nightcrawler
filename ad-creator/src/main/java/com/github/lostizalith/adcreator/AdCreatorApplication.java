@@ -38,7 +38,6 @@ public class AdCreatorApplication {
         return args -> {
 
             final List<CampaignItem> campaignItems = campaignsGenerator.generate(MatchType.EXACT, 10);
-
             final AdWordsSession session = adWordsSessionManager.createSession(CUSTOMER_ID);
             campaignCreator.create(session, campaignItems);
 
