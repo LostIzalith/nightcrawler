@@ -36,6 +36,8 @@ public class CampaignItem extends AdWordsItem {
 
     private List<AdGroupItem> adGroupItems;
 
+    private LocationSettings locationSettings;
+
     public static CampaignItem aCampaignItem(final String name,
                                              final BudgetItem budgetItem) {
         if (StringUtils.isBlank(name)) {

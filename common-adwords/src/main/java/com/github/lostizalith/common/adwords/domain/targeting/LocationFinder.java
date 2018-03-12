@@ -1,6 +1,7 @@
 package com.github.lostizalith.common.adwords.domain.targeting;
 
 import com.google.api.ads.adwords.axis.utils.v201710.SelectorBuilder;
+import com.google.api.ads.adwords.axis.v201710.cm.Location;
 import com.google.api.ads.adwords.axis.v201710.cm.LocationCriterion;
 import com.google.api.ads.adwords.axis.v201710.cm.LocationCriterionServiceInterface;
 import com.google.api.ads.adwords.axis.v201710.cm.Selector;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.lostizalith.common.adwords.domain.AdWordsUtils.AD_WORDS_SERVICES;
-import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Slf4j
@@ -31,30 +32,29 @@ public class LocationFinder {
             "TargetingStatus"
     };
 
-    public Map<String, List<LocationCriterion>> findLocations(final AdWordsSession session, final List<String> locationNames) {
+    public Map<String, Location> findLocations(final AdWordsSession session, final List<String> locationNames) {
 
         final LocationCriterionServiceInterface locationCriterionService =
                 AD_WORDS_SERVICES.get(session, LocationCriterionServiceInterface.class);
 
-        return locationNames.stream()
-                .collect(toMap(ln -> ln, ln -> getLocationCriteria(locationCriterionService, ln)));
-    }
+        final List<String> locations = locationNames.stream()
+                .distinct()
+                .collect(toList());
 
-    private List<LocationCriterion> getLocationCriteria(final LocationCriterionServiceInterface locationCriterionService,
-                                                        final String locationName) {
         final Selector selector = new SelectorBuilder()
                 .fields(FIELDS)
-                .equals("LocationName", locationName)
+                .in("LocationName", locations.toArray(new String[locationNames.size()]))
                 .build();
 
-        final LocationCriterion[] locationCriteria;
+        LocationCriterion[] locationCriteria = new LocationCriterion[]{};
         try {
             locationCriteria = locationCriterionService.get(selector);
-            return Arrays.asList(locationCriteria);
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
         }
 
-        return emptyList();
+        return Arrays.stream(locationCriteria)
+                .distinct()
+                .collect(toMap(l -> l.getLocation().getLocationName(), LocationCriterion::getLocation, (a, b) -> a));
     }
 }

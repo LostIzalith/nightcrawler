@@ -1,5 +1,6 @@
 package com.github.lostizalith.common.adwords.domain.model;
 
+import com.github.lostizalith.common.adwords.domain.AdGroupItemInterface;
 import com.github.lostizalith.common.adwords.domain.model.enumeration.MatchType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 @Setter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class KeywordItem extends AdWordsItem {
+public class KeywordItem extends AdWordsItem implements AdGroupItemInterface {
 
     private final String text;
 

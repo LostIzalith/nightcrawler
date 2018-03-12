@@ -7,23 +7,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Service
 public class LocationSettingsConfigurer extends TargetingSettingsConfigurer {
 
-    public void setLocations(final AdWordsSession session, final Long campaignId, final List<Long> locationIds) {
+    public void setLocations(final AdWordsSession session, final Map<Long, List<Long>> locationIds) {
 
-        final List<Criterion> criteria = locationIds.stream()
-                .map(id -> {
-                    final Location language = new Location();
-                    language.setId(id);
-                    return language;
-                }).collect(toList());
+        final Map<Long, List<Criterion>> criteriaById = locationIds.entrySet().stream()
+                .collect(toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
+                        .map(id -> {
+                            final Location location = new Location();
+                            location.setId(id);
+                            return (Criterion) location;
+                        }).collect(toList())));
 
-        mutate(session, campaignId, criteria);
+        mutate(session, criteriaById);
     }
 
 }

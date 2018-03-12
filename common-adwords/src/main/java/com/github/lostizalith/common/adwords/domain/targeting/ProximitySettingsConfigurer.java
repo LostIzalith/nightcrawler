@@ -9,31 +9,33 @@ import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 public class ProximitySettingsConfigurer extends TargetingSettingsConfigurer {
 
-    public void setProximity(final AdWordsSession session, final Long campaignId, final List<ProximitySettings> proximitySettings) {
+    public void setProximity(final AdWordsSession session, final Map<Long, List<ProximitySettings>> proximitySettings) {
 
-        final List<Criterion> proximities = proximitySettings.stream()
-                .map(ps -> {
-                    final Address address = new Address();
-                    address.setStreetAddress(ps.getStreetAddress());
-                    address.setCityName(ps.getCityName());
-                    address.setPostalCode(ps.getPostalCode());
-                    address.setCountryCode(ps.getCountryCode());
+        final Map<Long, List<Criterion>> criteria = proximitySettings.entrySet().stream()
+                .collect(toMap(Map.Entry::getKey, ps -> ps.getValue().stream()
+                        .map(s -> {
+                            final Address address = new Address();
+                            address.setStreetAddress(s.getStreetAddress());
+                            address.setCityName(s.getCityName());
+                            address.setPostalCode(s.getPostalCode());
+                            address.setCountryCode(s.getCountryCode());
 
-                    final Proximity proximity = new Proximity();
-                    proximity.setAddress(address);
-                    proximity.setRadiusDistanceUnits(ProximityDistanceUnits.KILOMETERS);
-                    proximity.setRadiusInUnits(ps.getRadius());
+                            final Proximity proximity = new Proximity();
+                            proximity.setAddress(address);
+                            proximity.setRadiusDistanceUnits(ProximityDistanceUnits.KILOMETERS);
+                            proximity.setRadiusInUnits(s.getRadius());
 
-                    return proximity;
-                }).map(p -> (Criterion) p)
-                .collect(toList());
+                            return (Criterion) proximity;
+                        }).collect(toList())));
 
-        mutate(session, campaignId, proximities);
+        mutate(session, criteria);
     }
 }

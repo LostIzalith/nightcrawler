@@ -2,8 +2,8 @@ package com.github.lostizalith.adcreator.domain.utils.generator;
 
 import com.github.lostizalith.common.adwords.domain.model.BudgetItem;
 import com.github.lostizalith.common.adwords.domain.model.CampaignItem;
+import com.github.lostizalith.common.adwords.domain.model.LocationSettings;
 import com.github.lostizalith.common.adwords.domain.model.enumeration.MatchType;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +25,12 @@ public class CampaignsGenerator {
                     final String name = UUID.randomUUID().toString();
                     final CampaignItem campaignItem = CampaignItem.aCampaignItem(name, budgetItem);
                     campaignItem.setAdGroupItems(adGroupsGenerator.generate(matchType, number));
+
+                    final LocationSettings locationSettings = new LocationSettings();
+                    locationSettings.setCountryName("Germany");
+                    locationSettings.setCityName("Berlin");
+
+                    campaignItem.setLocationSettings(locationSettings);
 
                     return campaignItem;
                 }).collect(Collectors.toList());

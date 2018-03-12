@@ -1,5 +1,6 @@
 package com.github.lostizalith.common.adwords.domain.adgroup;
 
+import com.github.lostizalith.common.adwords.domain.AdGroupItemInterface;
 import com.github.lostizalith.common.adwords.domain.ad.ExpandedTextAdCreator;
 import com.github.lostizalith.common.adwords.domain.keyword.KeywordCreator;
 import com.github.lostizalith.common.adwords.domain.model.AdGroupItem;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -33,21 +35,12 @@ public class AdGroupItemsCreator {
                 .filter(g -> Objects.nonNull(g.getId()))
                 .collect(toList());
 
-        final List<KeywordItem> keywordItems = successGroups.stream()
-                .peek(g -> g.getKeywordItems().forEach(k -> k.setAdGroupId(g.getId())))
-                .flatMap(g -> g.getKeywordItems().stream())
-                .collect(toList());
-
+        final List<KeywordItem> keywordItems = getItems(successGroups, AdGroupItem::getKeywordItems);
         final List<KeywordItem> createdKeywordItems = keywordCreator.create(session, keywordItems);
         final Map<Long, List<KeywordItem>> keywordsByGroupsId = createdKeywordItems.stream()
                 .collect(toMap(KeywordItem::getAdGroupId, Arrays::asList, CollisionsResolver::concat));
 
-        final List<ExpandedTextAdItem> expandedTextAdItems = successGroups.stream()
-                .peek(g -> g.getExpandedTextAdItems().forEach(ad -> ad.setAdGroupId(g.getId())))
-                .flatMap(g -> g.getExpandedTextAdItems().stream())
-                .collect(toList());
-
-
+        final List<ExpandedTextAdItem> expandedTextAdItems = getItems(successGroups, AdGroupItem::getExpandedTextAdItems);
         final List<ExpandedTextAdItem> createdAdsItems = expandedTextAdCreator.create(session, expandedTextAdItems);
         final Map<Long, List<ExpandedTextAdItem>> adsByGroupsId = createdAdsItems.stream()
                 .collect(toMap(ExpandedTextAdItem::getAdGroupId, Arrays::asList, CollisionsResolver::concat));
@@ -58,5 +51,12 @@ public class AdGroupItemsCreator {
         });
 
         return adGroupItems;
+    }
+
+    private static <T extends AdGroupItemInterface> List<T> getItems(final List<AdGroupItem> successGroups, final Function<AdGroupItem, List<T>> itemsExtractor) {
+        return successGroups.stream()
+                .peek(g -> itemsExtractor.apply(g).forEach(ad -> ad.setAdGroupId(g.getId())))
+                .flatMap(g -> itemsExtractor.apply(g).stream())
+                .collect(toList());
     }
 }
