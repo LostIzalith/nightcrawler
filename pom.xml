@@ -19,16 +19,19 @@
     </parent>
 
     <modules>
-        <!--<module>ad-creator</module>-->
+        <module>ad-creator</module>
         <module>greeting</module>
+        <module>common-adwords</module>
+        <module>common-utils</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <lombok.version>1.16.18</lombok.version>
+        <apache.commons.version>3.7</apache.commons.version>
         <kotlin.version>1.2.20</kotlin.version>
-
         <dozer.version>5.5.1</dozer.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <guava.version>23.5-jre</guava.version>
@@ -76,6 +79,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
